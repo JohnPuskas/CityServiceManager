@@ -1,7 +1,13 @@
 USE CityServiceManager;
 GO
 
+-- Validate employee assignments and department consistency.
+-- Assignment counts should match the expected distribution and
+-- queries identifying missing or invalid assignments should return 0 rows.
+-- Read-only Select statements; no database records are modified.
+
 -- Identify work orders without any employee assignments.
+-- Expected: 0 rows.
 SELECT
     wo.WorkOrderID,
     wo.Status,
@@ -15,6 +21,8 @@ WHERE woa.WorkOrderID IS NULL;
 GO
 
 -- Summarize how many employees are assigned to each work order.
+-- Expected: 1,000 work orders with one assignment;
+-- 500 work orders with two assignments.
 WITH AssignmentCounts AS
 (
     SELECT
@@ -35,6 +43,7 @@ GO
 
 -- Employees must belong to the department responsible
 -- for each work order to which they are assigned.
+-- Expected: 0 rows.
 SELECT
     woa.WorkOrderID,
     woa.EmployeeID,

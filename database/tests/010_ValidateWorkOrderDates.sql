@@ -1,7 +1,13 @@
 USE CityServiceManager;
 GO
 
+-- Validate chronological consistency across work orders
+-- and employee assignments.
+-- Queries identifying invalid dates should return 0 rows.
+-- Read-only Select statements; no database records are modified.
+
 -- Identify work orders with an invalid chronological sequence.
+-- Expected: 0 rows.
 SELECT
     wo.WorkOrderID,
     sr.SubmittedAt,
@@ -17,6 +23,7 @@ WHERE wo.CreatedAt < sr.SubmittedAt
 GO
 
 -- Verify that due dates occur seven days after creation.
+-- Expected: 0 rows.
 SELECT
     WorkOrderID,
     CreatedAt,
@@ -28,6 +35,7 @@ GO
 
 -- Identify employee assignments occurring outside the
 -- expected period between work order creation and start.
+-- Expected: 0 rows.
 SELECT
     woa.WorkOrderID,
     woa.EmployeeID,
